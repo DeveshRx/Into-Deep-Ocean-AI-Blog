@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  navselect={""}
+  title={"Error: Page not Found"}
+  description={"Turn your notes into stunning wallpapers with Notes on Screen! Boost productivity & never forget tasks. Download the free Android app now!"}
+  keywords={"ffdx"}
+  ogImage={"WebThumbnail.src"}
+>
+  <div class="container mx-auto">
+    <div class="mx-auto w-fit py-32 text-center">
+      <h1
+        class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl py-10"
+      >
+        Page Not Found
+      </h1>
+      <p class="text-xl text-muted-foreground">
+        {Astro.url}
+      </p>
+    </div>
+  </div>
+
+  <br /><br /><br /><br />
+</Layout>

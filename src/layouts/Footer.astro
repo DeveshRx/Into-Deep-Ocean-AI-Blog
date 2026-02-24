@@ -1,0 +1,53 @@
+---
+import { Separator } from "@/components/ui/separator";
+
+import { Image } from "astro:assets";
+
+const getCurrentYear = () => {
+  return new Date().getFullYear();
+};
+import {
+  BLOG_NAME,
+  BLOG_DESCRIPTION,
+  BLOG_AUTHOR,
+  BLOG_THUMBNAIL,
+} from "@/const";
+const SITE_DOMAIN = Astro.site;
+---
+
+<footer class="text-gray-600 body-font">
+  <Separator />
+
+  <div
+    class="container px-5 py-24 mx-auto flex items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col"
+  >
+    <div class="w-64 mx-auto text-center">
+      <a
+        href="/"
+        class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900"
+      >
+        <Image
+          class="w-16 aspect-square"
+          src={"/favicon.png"}
+          height={100}
+          width={100}
+          alt="Logo"
+        />
+        <span class="ml-3 text-xl">{BLOG_NAME}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="bg-gray-100">
+    <div
+      class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row"
+    >
+      <p class="text-gray-500 text-sm text-center sm:text-left">
+        <a href="/">
+          © {getCurrentYear()} {BLOG_NAME} — All rights reserved.
+        </a>
+        
+      </p>
+    </div>
+  </div>
+</footer>

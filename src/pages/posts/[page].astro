@@ -1,0 +1,94 @@
+---
+import BlogCard from "@/components/BlogCard.astro";
+import Layout from "@/layouts/Layout.astro";
+
+import { getCollection } from "astro:content";
+import {
+  BLOG_NAME,
+  BLOG_DESCRIPTION,
+  BLOG_AUTHOR,
+  BLOG_THUMBNAIL,
+} from "@/const";
+import PaginationWidget from "@/components/paginationWidget";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+export async function getStaticPaths({ paginate }) {
+  const generalBlog = await getCollection("generalBlog");
+
+  var allBlogPosts = [...generalBlog];
+
+  allBlogPosts = allBlogPosts.sort((a, b) => {
+    return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+  });
+
+  // Generate pages from our array of astronauts, with 2 to a page
+  return paginate(allBlogPosts, { pageSize: 18 });
+}
+// All paginated data is passed on the "page" prop
+const { page } = Astro.props;
+
+const currentPageNo = page.currentPage || 0;
+const totalPages = page.lastPage || 0;
+---
+
+<Layout
+  navselect={"pages"}
+  title={`Page ${currentPageNo}/${totalPages} | ${BLOG_NAME}  `}
+  description={BLOG_DESCRIPTION}
+  keywords={"Ocean, Marine Science, Deep Sea"}
+  ogImage={BLOG_THUMBNAIL}
+>
+  <section id="blog" class="">
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 mx-auto mt-5"
+    >
+      {
+        page.data.map(({ data }) => (
+          <div class="p-1 md:p-3 max-w-md " id="blogPostCard">
+            <BlogCard
+              title={data.title}
+              description={data.description}
+              thumb={data.image}
+              link={"/" + data.slug}
+              date={data.date}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section id="pagination">
+    <Pagination>
+      <PaginationContent>
+        {
+          page.url.prev ? (
+            <PaginationItem>
+              <PaginationPrevious href={page.url.prev} />
+            </PaginationItem>
+          ) : null
+        }
+
+        <PaginationWidget
+          totalPages={totalPages}
+          currentPage={currentPageNo}
+          client:load
+        />
+
+        {
+          page.url.next ? (
+            <PaginationItem>
+              <PaginationNext href={page.url.next} />
+            </PaginationItem>
+          ) : null
+        }
+      </PaginationContent>
+    </Pagination>
+  </section>
+</Layout>

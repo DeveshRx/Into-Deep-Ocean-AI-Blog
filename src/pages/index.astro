@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+import { getCollection } from "astro:content";
+
+const generalBlog = await getCollection("generalBlog");
+
+var allBlogPosts = [...generalBlog];
+
+allBlogPosts = allBlogPosts.sort((a, b) => {
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+
+const HeroPost = allBlogPosts[0];
+allBlogPosts.shift();
+
+allBlogPosts = allBlogPosts.slice(0, 18);
+
+import MainHome from "@/layouts/MainHome.astro";
+import { Button } from "@/components/ui/button";
+import { ChevronsRight } from "lucide-react";
+import { BLOG_NAME, BLOG_DESCRIPTION, BLOG_AUTHOR, BLOG_THUMBNAIL } from "@/const";
+---
+
+<Layout
+  navselect={"home"}
+  title={`${BLOG_NAME}`}
+  description={BLOG_DESCRIPTION}
+  keywords={"Ocean, Marine Science, Deep Sea"}
+  ogImage={BLOG_THUMBNAIL}
+>
+  <MainHome HeroPost={HeroPost} allBlogPosts={allBlogPosts} />
+
+  <div class="mx-auto w-fit">
+    <a href="/posts/2">
+      <Button className="mx-auto w-fit hover:cursor-pointer"
+        >View More Posts <ChevronsRight /></Button
+      ></a
+    >
+  </div>
+
+  <br />
+</Layout>

@@ -1,0 +1,53 @@
+---
+interface Props {
+  date: Date;
+  title: string;
+  description: string;
+  thumb: string;
+  link: string;
+}
+
+const { title, description, thumb, link, date } = Astro.props;
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Image } from "astro:assets";
+import { Button } from "./ui/button";
+---
+
+<a data-astro-prefetch href={link} class="w-fit mx-auto">
+  <Card
+    className="max-w-md h-full hover:scale-[102%] transition-all duration-300 ease-in-out transform-gpu border-0 shadow-none hover:bg-accent mx-auto"
+  >
+    <CardHeader>
+      <Image
+        src={thumb}
+        alt={title}
+        class="rounded-lg aspect-video w-full"
+        height={500}
+        width={500}
+        loading="lazy"
+        decoding="async"
+      />
+
+      <CardTitle>
+        <p class="line-clamp-2 leading-normal">
+          {title}
+        </p>
+      </CardTitle>
+      <CardDescription>
+        <p class="line-clamp-2 leading-normal">
+          {description}
+        </p>
+      </CardDescription>
+    </CardHeader>
+  
+  </Card>
+</a>

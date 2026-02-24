@@ -1,0 +1,132 @@
+---
+import "@/styles/global.css";
+
+import { ClientRouter } from "astro:transitions";
+
+import NavBar from "./NavBar.astro";
+import Footer from "./Footer.astro";
+
+const {
+  navselect,
+
+  title,
+  description,
+  keywords,
+  author,
+  robots,
+  canonical,
+  ogImage,
+  articlePublishedTime,
+  articleModifiedTime,
+  isBlogPage,
+} = Astro.props;
+import { BLOG_NAME, BLOG_DESCRIPTION, BLOG_AUTHOR, BLOG_THUMBNAIL } from "@/const";
+
+
+var meta_title =
+  title || `${BLOG_NAME}`;
+var meta_description =
+  description || BLOG_DESCRIPTION;
+var meta_keywords =
+  keywords ||
+  "ocean, marine science, deep sea, oceanography, marine biology, ocean exploration, underwater research, ocean conservation, marine ecosystems, ocean technology";
+var meta_author = author || BLOG_AUTHOR;
+
+var meta_canonical = canonical || `${Astro.request.url}`;
+var meta_ogImage =
+  ogImage ||
+  `${BLOG_THUMBNAIL}`;
+var meta_articlePublishedTime = articlePublishedTime || `2026-01-17T12:00:00Z`;
+var meta_articleModifiedTime = articleModifiedTime || `${getCurrentDateTime()}`;
+
+if (author != null) {
+}
+
+function getCurrentDateTime() {
+  const now = new Date();
+  return now.toISOString();
+}
+
+const isBlog= isBlogPage || false
+
+const SITE_DOMAIN=Astro.site
+
+
+
+
+
+
+---
+
+
+<!doctype html  transition:name="root" transition:animate={fade({ duration: "0.45s" })}>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{meta_title}</title>
+    <meta name="description" content={meta_description} />
+    <meta name="keywords" content={meta_keywords} />
+    <meta name="author" content={meta_author} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={meta_canonical} />
+    <meta property="og:site_name" content={BLOG_NAME} />
+    <meta property="og:title" content={meta_title} />
+    <meta property="og:description" content={meta_description} />
+    <meta property="og:image" content={meta_ogImage} />
+    <meta property="og:url" content={meta_canonical} />
+    <meta property="og:type" content="website" />
+    <meta
+      property="article:published_time"
+      content={meta_articlePublishedTime}
+    />
+    <meta property="article:modified_time" content={meta_articleModifiedTime} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta_title} />
+    <meta name="twitter:description" content=`${meta_description}` />
+    <meta name="twitter:image" content={meta_ogImage} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+   
+
+
+   
+
+
+<ClientRouter />
+
+
+
+  </head>
+  <body>
+    <NavBar navselect={navselect} />
+    <div class="container mx-auto"  
+  >
+      <slot />
+    </div>
+
+    <Footer />
+
+    <script>
+      
+      
+         import { initializeApp } from "firebase/app";
+      import { getAnalytics, logEvent } from "firebase/analytics";
+
+         const firebaseConfig = {
+        
+        
+      }; 
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      
+    </script>
+
+
+  </body>
+</html>
+

@@ -1,0 +1,205 @@
+---
+import { type CollectionEntry, getCollection, getEntry } from "astro:content";
+
+import { render } from "astro:content";
+
+import { Separator } from "@/components/ui/separator";
+
+import Layout from "../layouts/Layout.astro";
+import MDLink from "@/components/MDLink.astro";
+import { Image } from "astro:assets";
+
+import { FileText } from "lucide-react";
+import ShareBar from "@/components/ShareBar";
+import {
+  BLOG_NAME,
+  BLOG_DESCRIPTION,
+  BLOG_AUTHOR,
+  BLOG_THUMBNAIL,
+} from "@/const";
+
+export async function getStaticPaths() {
+  const generalBlog = await getCollection("generalBlog");
+
+  var posts = generalBlog;
+
+  return posts.map((post) => ({
+    params: { blog: post.id },
+    props: post,
+  }));
+}
+
+type Props = CollectionEntry<"generalBlog">;
+
+const post = Astro.props;
+const { Content } = await render(post);
+
+const { title, description, image, date, slug, keywords, relatedPosts } =
+  post.data;
+
+const generalBlog = await getCollection("generalBlog", ({ data }) => {
+  return data.slug != slug;
+});
+
+var allPosts = generalBlog;
+allPosts = allPosts.sort((a, b) => {
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+allPosts.length = 5;
+
+// get related posts
+var relatedPostsData = [];
+if (relatedPosts?.length != null) {
+  for (let index = 0; index < relatedPosts.length; index++) {
+    const post = relatedPosts[index];
+
+    const postData = await getEntry("generalBlog", `${post.id}`);
+    console.log(postData?.data.title);
+    relatedPostsData.push(postData?.data);
+  }
+}
+---
+
+<Layout
+  title={`${title} | ${BLOG_NAME}`}
+  description={`${description}`}
+  keywords={keywords}
+  ogImage={image}
+  meta_articlePublishedTime={date}
+  isBlogPage={true}
+>
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 text-base md:pt-10">
+    <div class="grid grid-cols-1 md:grid-cols-4">
+      <main class="col-span-3">
+        <article class="mx-auto prose prose-xl max-w-none px-2">
+          <div class="md:pt-10">
+            <h1
+              class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"
+            >
+              {title}
+            </h1>
+
+            <div class="flex flex-row">
+              <div class="my-auto flex flex-row">
+                <ShareBar url={Astro.request.url} title={title} client:load />
+              </div>
+
+              <div class="flex-1">
+                <p class="text-xl text-muted-foreground text-right">
+                  {
+                    new Intl.DateTimeFormat("en", { dateStyle: "long" }).format(
+                      date,
+                    )
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="">
+            {
+              (
+                <Image
+                  class="rounded-md aspect-video object-cover "
+                  src={image}
+                  alt={title}
+                  height={1000}
+                  width={1000}
+                />
+              )
+            }
+          </div>
+
+          <Content components={{ a: MDLink }} />
+
+          <p class="text-base text-muted-foreground mx-auto w-fit">
+            ~ ~ THANK YOU FOR READING ~ ~
+          </p>
+
+          <div id="share" class="flex flex-row mx-auto w-fit">
+            <p class="text-base font-semibold">Share: &nbsp;</p>
+            <ShareBar url={Astro.request.url} title={title} client:load />
+          </div>
+          <div id="x-share" class="p-3">
+            <a
+              href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+              class="twitter-share-button"
+              data-show-count="false">Tweet</a
+            >
+            <script
+              async
+              src="https://platform.twitter.com/widgets.js"
+              charset="utf-8"></script>
+          </div>
+        </article>
+      </main>
+      <div class="col-span-1 pl-3">
+        <!-- Colum 2 -->
+        <div id="Spacer" class="md:h-screen"></div>
+
+        <div class="pt-0 md:top-0">
+          {
+            relatedPostsData && relatedPostsData.length > 0 ? (
+              <div class="mt-8 md:mt-0 ">
+                <div class=" border rounded-2xl">
+                  <h4 class="scroll-m-20 text-xl font-semibold tracking-tight text-muted-foreground p-2 mt-2 flex flex-row items-center gap-1">
+                    <FileText /> Explore
+                  </h4>
+
+                  <Separator />
+                  {relatedPostsData.map((post) => (
+                    <a
+                      data-astro-prefetch
+                      href={"/" + post.slug}
+                      id="latestpost"
+                    >
+                      <div class="my-2 p-2 hover:bg-accent ">
+                        <p class="text-xl text-muted-foreground line-clamp-4">
+                          {post.title}
+                        </p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p />
+            )
+          }
+          <br />
+          {
+            allPosts && allPosts.length > 0 ? (
+              <div class="mt-8 md:mt-0 ">
+                <div class=" border rounded-2xl">
+                  <h4 class="scroll-m-20 text-xl font-semibold tracking-tight text-muted-foreground p-2 mt-2 flex flex-row items-center gap-1">
+                    <FileText /> Latest
+                  </h4>
+
+                  <Separator />
+                  {allPosts.map((post) => (
+                    <a
+                      data-astro-prefetch
+                      href={"/" + post.data.slug}
+                      id="latestpost"
+                    >
+                      <div class="my-2 p-2 hover:bg-accent ">
+                        <p class="text-xl text-muted-foreground line-clamp-4">
+                          {" "}
+                          {post.data.title}
+                        </p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p />
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <br /><br /><br /><br />
+</Layout>

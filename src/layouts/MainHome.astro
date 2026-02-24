@@ -1,0 +1,84 @@
+---
+import { Badge } from "@/components/ui/badge";
+
+import { Image } from "astro:assets";
+
+import { Separator } from "@/components/ui/separator";
+
+import BlogCard from "@/components/BlogCard.astro";
+
+import { Button } from "@/components/ui/button";
+
+const { HeroPost, allBlogPosts } = Astro.props;
+---
+<main>
+
+
+<section id="hero" class="text-gray-600 body-font">
+  <div
+  transition:animate="slide"
+  transition:name="hero"
+    class="container mx-auto flex px-5 py-5 md:py-24 md:flex-row flex-col items-center"
+  >
+    <div
+      class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center"
+    >
+      <Badge className=" mb-3">FEATURED</Badge>
+
+      <h1
+        class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 "
+      >
+        {HeroPost.data.title}
+      </h1>
+      <p class="mb-8 leading-relaxed line-clamp-5">
+        {HeroPost.data.description}
+      </p>
+      <div class="flex justify-center">
+        <a data-astro-prefetch href={"/" + HeroPost.data.slug}>
+          <Button className="inline-flex mx-2 cursor-pointer"> Read </Button></a
+        >
+
+        <a href="#blog">
+          <Button
+            variant={"secondary"}
+            className="inline-flex mx-2 cursor-pointer"
+          >
+            Explore
+          </Button>
+        </a>
+      </div>
+    </div>
+    <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
+      <Image
+        class="object-cover object-center rounded-2xl aspect-auto"
+        alt={HeroPost.data.title}
+        src={HeroPost.data.image}
+        height={720}
+        width={600}
+      />
+    </div>
+  </div>
+
+  <Separator />
+</section>
+
+<section id="blog" class="">
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0 mx-auto mt-5"
+  >
+    {
+      allBlogPosts.map((post) => (
+        <div class="p-1 md:p-3 max-w-md " id="blogPostCard">
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            thumb={post.data.image}
+            link={"/" + post.data.slug}
+            date={post.data.date}
+          />
+        </div>
+      ))
+    }
+  </div>
+</section>
+</main>
