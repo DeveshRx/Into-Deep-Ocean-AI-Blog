@@ -21,7 +21,7 @@ export default defineConfig({
 
   output: "static",
   outDir: "./docs",
-  site: "https://deveshrx.github.io",
+  site: "https://deveshrx.github.io/Into-Deep-Ocean-AI-Blog",
 
   integrations: [
     react(),
