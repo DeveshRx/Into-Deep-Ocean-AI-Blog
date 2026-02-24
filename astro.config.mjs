@@ -20,11 +20,11 @@ export default defineConfig({
   },
 
   output: "static",
-  outDir: "./docs",
+  //outDir: "./docs",
 
   // TODO: Change this to your repo name if you are deploying to GitHub Pages
-  base: "/Into-Deep-Ocean-AI-Blog",
-  site: "https://deveshrx.github.io",
+  //base: "/Into-Deep-Ocean-AI-Blog",
+  site: "https://into-deep-ocean.netlify.app",
 
   integrations: [
     react(),
