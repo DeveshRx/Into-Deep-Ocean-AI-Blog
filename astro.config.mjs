@@ -21,6 +21,8 @@ export default defineConfig({
   },
 
   output: 'static',
+  outDir: './docs',
+
 
   integrations: [react(), mdx(), sitemap({
     changefreq: 'monthly',
