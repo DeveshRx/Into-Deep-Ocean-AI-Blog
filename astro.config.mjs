@@ -21,7 +21,10 @@ export default defineConfig({
 
   output: "static",
   outDir: "./docs",
-  site: "https://deveshrx.github.io/Into-Deep-Ocean-AI-Blog",
+
+  // TODO: Change this to your repo name if you are deploying to GitHub Pages
+  base: "/Into-Deep-Ocean-AI-Blog",
+  site: "https://deveshrx.github.io",
 
   integrations: [
     react(),
