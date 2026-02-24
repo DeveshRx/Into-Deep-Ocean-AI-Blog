@@ -1,40 +1,41 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
-import react from '@astrojs/react';
+import react from "@astrojs/react";
 
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
-
+import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
   prefetch: {
-    defaultStrategy: 'load',
-    prefetchAll: true
+    defaultStrategy: "load",
+    prefetchAll: true,
   },
-  trailingSlash: 'never',
+  trailingSlash: "never",
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
 
-  output: 'static',
-  outDir: './docs',
+  output: "static",
+  outDir: "./docs",
+  site: "https://deveshrx.github.io",
 
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      changefreq: "monthly",
+      priority: 0.7,
 
-  integrations: [react(), mdx(), sitemap({
-    changefreq: 'monthly',
-    priority: 0.7,
-
-    // lastmod: new Date('2022-02-24'),
-  })],
+      // lastmod: new Date('2022-02-24'),
+    }),
+  ],
   markdown: {
     shikiConfig: {
-      theme: 'material-theme',
+      theme: "material-theme",
     },
   },
-
-
 });
